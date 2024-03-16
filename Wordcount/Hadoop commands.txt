@@ -1,0 +1,26 @@
+//Update hadoop-env files to set java_home
+//Delete Data folder and craete a new one with subfolders, edit hdfs_site.xml
+
+
+cd C:\hadoop-2.8.0\bin
+hdfs namenode -format
+cd C:\hadoop-2.8.0\sbin
+start-dfs.cmd
+start-yarn.cmd
+jps (To verify if all processes are running; Namenode, Datanode, Resource
+Manager, Node Manager)
+
+
+
+
+hadoop fs -mkdir -p /wordcount
+hadoop fs -copyFromLocal C:/Users/jeeth/Documents/Lab/1/inputfile.txt /wordcount
+hdfs dfs -ls /wordcount
+
+
+hadoop jar C:\hadoop-2.8.0\share\hadoop\tools\lib\hadoop-streaming-2.8.0.jar -input /wordcount/inputfile.txt -output /wordcount/output -file "C:/Users/jeeth/Documents/Lab/1/mapper.py" -mapper "python mapper.py" -file "C:/Users/jeeth/Documents/Lab/1/reducer.py" -reducer "python reducer.py" -numReduceTasks=3
+
+
+hdfs dfs -text /wordcount/output/* > C:/Users/jeeth/Documents/Lab/1/outputfile.txt
+
+hadoop fs -rm -r /wordcount/output
